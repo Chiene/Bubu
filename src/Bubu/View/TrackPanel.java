@@ -41,7 +41,7 @@ public class TrackPanel extends JPanel {
 		// TODO Auto-generated method stub
 		super.paintComponent(g);
 
-		bubu.draw(graphics2d);
+		bubu.draw(g);
 		for(Wall wall : walls) {
 			wall.draw(g);
 		}
