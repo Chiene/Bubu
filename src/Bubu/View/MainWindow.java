@@ -10,6 +10,7 @@ public class MainWindow extends JFrame{
 		// TODO Auto-generated constructor stub
 		setVisible(true);
 		setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+		add(new TrackPanel());
 	}
 
 }
