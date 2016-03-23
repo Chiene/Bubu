@@ -1,29 +1,32 @@
 package Bubu.View;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.List;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
-import java.util.Iterator;
 import javax.swing.JPanel;
 
+import Bubu.Constants.Constants;
 import Bubu.Entity.Bubu;
 import Bubu.Entity.Point;
 import Bubu.Entity.Wall;;
 
 public class TrackPanel extends JPanel {
 	Bubu bubu;
-	Vector<Wall> walls; 
-	Graphics2D graphics2d;
+	Point anchor;
+	Vector<Wall> walls;
 
 	public TrackPanel() {
 		super();
+
 		walls = new Vector<>();
 		initMap();
 		// TODO Auto-generated constructor stub
-		bubu = new Bubu();
+		bubu = new Bubu(new Point(0, 0));
+		anchor = new Point(Constants.WINDOW_WIDTH / 3, Constants.WINDOW_HEIGHT);
+		
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 
@@ -41,22 +44,21 @@ public class TrackPanel extends JPanel {
 		// TODO Auto-generated method stub
 		super.paintComponent(g);
 
-		bubu.draw(g);
-		for(Wall wall : walls) {
-			wall.draw(g);
+		bubu.draw(g, anchor);
+		for (Wall wall : walls) {
+			wall.draw(g, anchor);
 		}
 	}
-	
+
 	public void initMap() {
-		walls.add(new Wall(new Point(-6, 0),new Point(-6, 22)));
-		walls.add(new Wall(new Point(-6, 22),new Point(18,22)));
-		walls.add(new Wall(new Point(18, 22),new Point(18,37)));
-		
-		walls.add(new Wall(new Point(6, 0),new Point(6, 10)));
-		walls.add(new Wall(new Point(6, 10),new Point(30,10)));
-		walls.add(new Wall(new Point(30, 10),new Point(30,37)));
-		
-		
+		walls.add(new Wall(new Point(-60, 0), new Point(-60, 220)));
+		walls.add(new Wall(new Point(-60, 220), new Point(180, 220)));
+		walls.add(new Wall(new Point(180, 220), new Point(180, 370)));
+
+		walls.add(new Wall(new Point(60, 0), new Point(60, 100)));
+		walls.add(new Wall(new Point(60, 100), new Point(300, 100)));
+		walls.add(new Wall(new Point(300, 100), new Point(300, 370)));
+
 	}
 
 }

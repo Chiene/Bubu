@@ -9,7 +9,10 @@ public class MainWindow extends JFrame{
 		super("Bubu");
 		// TODO Auto-generated constructor stub
 		setVisible(true);
-		setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+		setSize(Constants.WINDOW_WIDTH,Constants.WINDOW_HEIGHT+40);
+		getBounds().getWidth();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		add(new TrackPanel());
 	}
 
