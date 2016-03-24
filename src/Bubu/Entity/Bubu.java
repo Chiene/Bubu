@@ -2,16 +2,19 @@ package Bubu.Entity;
 
 import java.awt.Graphics;
 import Bubu.Constants.Constants;
+import Bubu.Environment.Map;
 import Bubu.Util.Coordinate;
 
 public class Bubu {
 	Point centerPosition;
+	Map map;
 
 	double horizontalAngle = 90;
 	double steeringAngle = 0;
 
-	public Bubu(Point _position) {
+	public Bubu(Map _map, Point _position) {
 		// TODO Auto-generated constructor stub
+		map = _map;
 		centerPosition = _position;
 	}
 
