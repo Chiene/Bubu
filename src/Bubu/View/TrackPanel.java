@@ -25,7 +25,7 @@ public class TrackPanel extends JPanel {
 
 		initMap();
 		// TODO Auto-generated constructor stub
-		bubu = new Bubu(new Point(0, 0));
+		bubu = new Bubu(map, new Point(0, 0));
 
 		
 		Timer timer = new Timer();
