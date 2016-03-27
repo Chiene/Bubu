@@ -21,6 +21,7 @@ public class Bubu {
 	public Bubu(Map _map, Point _position) {
 		// TODO Auto-generated constructor stub
         centerPosition = _position;
+		nextPosition = _position;
         map = _map;
         fuzzySystem = new FuzzySystem();
         sensors = new Vector<>();
