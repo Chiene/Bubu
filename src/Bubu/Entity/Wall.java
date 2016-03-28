@@ -1,17 +1,32 @@
 package Bubu.Entity;
 
 import java.awt.Graphics;
-
 import Bubu.Util.Coordinate;
+import com.sun.javafx.geom.Line2D;
 
 
 public class Wall {
 	Point startPoint;
 	Point endPoint;
-	public Wall(Point startPoint,Point endPoint) {
+	int xDiff;
+	int yDiff;
+	double mSlope;
+	int constant;
+
+	private Line2D line;
+	public Wall(Point startPoint,Point endPoint)  {
 		// TODO Auto-generated constructor stub
+
+		line = new Line2D();
+		line.setLine((float)startPoint.getX(),(float)startPoint.getY(),(float)endPoint.getX(),(float)endPoint.getY());
+
 		this.startPoint = startPoint;
 		this.endPoint = endPoint;
+		xDiff = (int)(endPoint.getX() - startPoint.getX());
+		yDiff =(int) (endPoint.getY() - startPoint.getY());
+		mSlope = Coordinate.getSlope(xDiff,yDiff);
+
+		//line.ptLineDist()
 	}
 	
 	public void draw(Graphics g,Point anchor) {
@@ -20,12 +35,36 @@ public class Wall {
 		g.drawLine((int)translatePosition_start.getX(), (int)translatePosition_start.getY(), (int)translatePosition_end.getX(),(int) translatePosition_end.getY());
 	}
 
-	public double calculateMinDistance(Point point) {
-		///|point to line| / sqrt(a *a + b*b)
-		double result = 0;
-		int a =  (int)(startPoint.getX()- endPoint.getX());
-		int b =  (int)(startPoint.getY()- endPoint.getY());
-		result = Math.abs(a*point.getX()+b*point.getY()+a*startPoint.getX()+b*startPoint.getY())/Math.sqrt(a*a+b*b);
-		return result;
+	public boolean isIntersect(double lintSlope) {
+		if(lintSlope == mSlope) {
+			return false;
+		}
+		return true;
 	}
+
+
+	public Point getIntersect(double lineSlope,double lineConstant) {
+		double x=0;
+		double y=0;
+		assert(mSlope != lineSlope );
+
+		if(mSlope == Double.MAX_VALUE) {
+			x = startPoint.getX();
+			y = lineSlope *x + lineConstant;
+		}
+		else if( mSlope == 0) {
+			y = startPoint.getY();
+			x = (y - lineConstant) / lineSlope;
+		}
+		else {
+			assert(false);
+		}
+
+		return new Point( x,y);
+	}
+
+
+
+
+
 }
