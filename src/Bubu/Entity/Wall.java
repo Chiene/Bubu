@@ -19,4 +19,13 @@ public class Wall {
 		Point translatePosition_end = Coordinate.translate(anchor, endPoint, false, true);
 		g.drawLine((int)translatePosition_start.getX(), (int)translatePosition_start.getY(), (int)translatePosition_end.getX(),(int) translatePosition_end.getY());
 	}
+
+	public double calculateMinDistance(Point point) {
+		///|point to line| / sqrt(a *a + b*b)
+		double result = 0;
+		int a =  (int)(startPoint.getX()- endPoint.getX());
+		int b =  (int)(startPoint.getY()- endPoint.getY());
+		result = Math.abs(a*point.getX()+b*point.getY()+a*startPoint.getX()+b*startPoint.getY())/Math.sqrt(a*a+b*b);
+		return result;
+	}
 }
