@@ -25,9 +25,9 @@ public class Bubu {
         map = _map;
         fuzzySystem = new FuzzySystem();
         sensors = new Vector<>();
-        sensors.add(new Sensor(map,horizontalAngle - 45,centerPosition));
-        sensors.add(new Sensor(map,horizontalAngle,centerPosition));
-        sensors.add(new Sensor(map,horizontalAngle+45,centerPosition));
+        sensors.add(new Sensor(map,45,centerPosition));
+        sensors.add(new Sensor(map,90,centerPosition));
+        sensors.add(new Sensor(map,135,centerPosition));
 
 	}
 
@@ -61,7 +61,5 @@ public class Bubu {
 	private Point getNextPosition(Point currentPosition) {
 		return new Point(currentPosition.getX() + Math.cos(Math.toRadians(horizontalAngle + steeringAngle)) + Math.sin(Math.toRadians(steeringAngle)) * Math.sin(Math.toRadians(horizontalAngle)),currentPosition.getY() + Math.sin(Math.toRadians(horizontalAngle + steeringAngle)) - Math.sin(Math.toRadians(steeringAngle)) * Math.cos(Math.toRadians(horizontalAngle)));
 	}
-
-
 
 }
