@@ -7,7 +7,6 @@ import Bubu.Environment.Map;
 import Bubu.Util.Coordinate;
 
 import java.awt.*;
-import java.awt.geom.Arc2D;
 
 /**
  * Created by jiaching on 2016/3/25.
@@ -20,15 +19,19 @@ public class Sensor {
     private Point centerPosition;
     private Point intersectPoint;
     private Point nextPosition;
+    private Point detectPoint;
     private Point edgePoint;
 
     public Sensor(Map _map,double _angle,Point _position) {
         map = _map;
         fixedAngle = _angle;
+        angle = _angle;
         distance = Double.MAX_VALUE;
         centerPosition = _position;
+        detectPoint = new Point(0,0);
         edgePoint = new Point(0,0);
         intersectPoint = new Point(Double.MAX_VALUE,Double.MAX_VALUE);
+
     }
 
     public int detect(double steeringAngle) {
@@ -44,19 +47,23 @@ public class Sensor {
         else {
             angle = fixedAngle;
         }
+
         edgePoint.setX(nextPosition.getX()+Constants.CAR_RADIUS*Math.cos(Math.toRadians(angle)));
         edgePoint.setY(nextPosition.getY()+Constants.CAR_RADIUS*Math.sin(Math.toRadians(angle)));
-        //Point vector = new Point(edgePoint.getX()-centerPosition.getX(),edgePoint.getY()-centerPosition.getY());
+
+        detectPoint.setX(nextPosition.getX()+Constants.CAR_RADIUS*Constants.SENSOR_DETECT_DISTANCE*Math.cos(Math.toRadians(angle)));
+        detectPoint.setY(nextPosition.getY()+Constants.CAR_RADIUS*Constants.SENSOR_DETECT_DISTANCE*Math.sin(Math.toRadians(angle)));
+
         double tempResultDistance = Double.MAX_VALUE;
-        Point tempIntersectPoint = intersectPoint;
+        Point tempIntersectPoint = new Point( intersectPoint.getX(), intersectPoint.getY());
 
         for (Wall wall : map.getWalls()) {
-            double xDiff = edgePoint.getX() - nextPosition.getX();
-            double yDiff = edgePoint.getY() - nextPosition.getY();
+            double xDiff = detectPoint.getX() - nextPosition.getX();
+            double yDiff = detectPoint.getY() - nextPosition.getY();
             double slope = Coordinate.getSlope(xDiff, yDiff);
-            if(wall.isIntersect(slope)) {
-                Point intersectP = wall.getIntersect(slope, Coordinate.getLineConstant(slope, edgePoint));
-                if (intersectP != null) {
+            if(wall.isIntersect(edgePoint,detectPoint)) {
+                Point intersectP = wall.getIntersect(slope, Coordinate.getLineConstant(slope, detectPoint));
+                if (intersectP != null && !(edgePoint.getX() > intersectP.getX() && edgePoint.getY() > intersectP.getY() )) {
                     distance = Coordinate.getDistance(intersectP, edgePoint);
                     if (distance < tempResultDistance) {
                         tempResultDistance = distance;
@@ -68,6 +75,7 @@ public class Sensor {
                 }
             }
         }
+        distance = tempResultDistance;
         intersectPoint.setX(tempIntersectPoint.getX());
         intersectPoint.setY(tempIntersectPoint.getY());
         return 0;
@@ -77,13 +85,17 @@ public class Sensor {
         nextPosition = _nextPosition;
     }
 
+    public double getDistance() {
+        return distance;
+    }
+
     public void updateCenterPosition(Point _centerPosition) {
         centerPosition = _centerPosition;
     }
 
     public void draw(Graphics g,Point anchor) {
-        Point translatePosition = Coordinate.translate(anchor, edgePoint, false, true);
-        Point translateEdgePosition = Coordinate.translate(anchor,intersectPoint,false,true);
+        Point translatePosition = Coordinate.translate(anchor, nextPosition, false, true);
+        Point translateEdgePosition = Coordinate.translate(anchor, intersectPoint,false,true);
         g.drawLine(
                 (int) translatePosition.getX(),
                 (int) translatePosition.getY(),

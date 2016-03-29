@@ -32,11 +32,13 @@ public class Bubu {
 	}
 
 	public void update() {
+
 		Point next = getNextPosition(centerPosition);
 		centerPosition.setX(next.getX());
 		centerPosition.setY(next.getY());
 		steeringAngle = fuzzySystem.getSteeringAngle();
-		horizontalAngle = horizontalAngle - Math.asin((2*Math.sin(Math.toRadians(steeringAngle)) / Constants.CAR_HEIGHT ));
+		horizontalAngle = 90-steeringAngle;
+
 		for (Sensor sensor: sensors) {
             sensor.updateCenterPosition(centerPosition);
 			sensor.updateNextPosition(getNextPosition(centerPosition));
@@ -52,6 +54,7 @@ public class Bubu {
 		Point translatePosition = Coordinate.translate(anchor, centerPosition, false, true);
 		translatePosition.setX(translatePosition.getX()-Constants.CAR_RADIUS);
 		translatePosition.setY(translatePosition.getY()-Constants.CAR_RADIUS);
+		//System.out.println("position x: " + translatePosition.getX() + " y: " + translatePosition.getY());
 		g.drawOval((int)translatePosition.getX(),(int)    translatePosition.getY(), Constants.CAR_WIDTH, Constants.CAR_HEIGHT);
         for(Sensor sensor:sensors) {
             sensor.draw(g,anchor);
@@ -59,7 +62,14 @@ public class Bubu {
 	}
 
 	private Point getNextPosition(Point currentPosition) {
-		return new Point(currentPosition.getX() + Math.cos(Math.toRadians(horizontalAngle + steeringAngle)) + Math.sin(Math.toRadians(steeringAngle)) * Math.sin(Math.toRadians(horizontalAngle)),currentPosition.getY() + Math.sin(Math.toRadians(horizontalAngle + steeringAngle)) - Math.sin(Math.toRadians(steeringAngle)) * Math.cos(Math.toRadians(horizontalAngle)));
+		return new Point(currentPosition.getX() +
+				Math.cos(Math.toRadians(horizontalAngle + steeringAngle)) +
+				Math.sin(Math.toRadians(steeringAngle)) *
+						Math.sin(Math.toRadians(horizontalAngle)),
+				currentPosition.getY() +
+						Math.sin(Math.toRadians(horizontalAngle + steeringAngle)) -
+						Math.sin(Math.toRadians(steeringAngle)) *
+								Math.cos(Math.toRadians(horizontalAngle)));
 	}
 
 }

@@ -6,14 +6,13 @@ import com.sun.javafx.geom.Line2D;
 
 
 public class Wall {
-	Point startPoint;
-	Point endPoint;
+	private Point startPoint;
+	private Point endPoint;
 	int xDiff;
-	int yDiff;
-	double mSlope;
-	int constant;
-
+	private int yDiff;
+	private double mSlope;
 	private Line2D line;
+
 	public Wall(Point startPoint,Point endPoint)  {
 		// TODO Auto-generated constructor stub
 
@@ -35,11 +34,9 @@ public class Wall {
 		g.drawLine((int)translatePosition_start.getX(), (int)translatePosition_start.getY(), (int)translatePosition_end.getX(),(int) translatePosition_end.getY());
 	}
 
-	public boolean isIntersect(double lintSlope) {
-		if(lintSlope == mSlope) {
-			return false;
-		}
-		return true;
+	public boolean isIntersect(Point point1,Point point2) {
+
+		return line.intersectsLine((float) point1.getX(),(float)point1.getY(),(float)point2.getX(),(float)point2.getY());
 	}
 
 
@@ -47,7 +44,7 @@ public class Wall {
 		double x=0;
 		double y=0;
 		assert(mSlope != lineSlope );
-
+		// y=mx+b
 		if(mSlope == Double.MAX_VALUE) {
 			x = startPoint.getX();
 			y = lineSlope *x + lineConstant;
