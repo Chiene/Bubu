@@ -8,6 +8,10 @@ public class Constants {
 	public static int CAR_HEIGHT = 60;
 	public static int SENSOR_DETECT_DISTANCE = 10;
 
+	//rule
+	public static int SMF_RULE_NUMBER = 3;
+	public static int PZN_RULE_NUMBER = 3;
+
 	// Window
 	public static int WINDOW_WIDTH = 480;
 	public static int WINDOW_HEIGHT = 640;

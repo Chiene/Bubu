@@ -37,7 +37,7 @@ public class TrackPanel extends JPanel {
 				bubu.update();
 				repaint();
 			}
-		}, 0, 50);
+		}, 0, 100);
 	}
 
 	@Override

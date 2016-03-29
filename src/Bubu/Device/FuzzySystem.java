@@ -10,23 +10,37 @@ public class FuzzySystem {
     int maxt = 50;
     double steeringAngle = 0;
     boolean isAdd = true;
+    FuzzyRuleFunction SMFRuleFunction;
+    FuzzyRuleFunction PZNRuleFunction;
     public FuzzySystem() {
 
+        SMFRuleFunction = new FuzzyRuleFunction(0,40,20,100,80,120);
+        PZNRuleFunction = new FuzzyRuleFunction(-160,-40,-120,120,40,160);
     }
 
-    public double getSteeringAngle() {
-        if(steeringAngle >= 40) {
-            isAdd = false;
+
+    public double getSteeringAngle(double l,double m,double r) {
+
+        double MAX = Constants.SENSOR_DETECT_DISTANCE*Constants.CAR_RADIUS;
+        double MIN = Constants.CAR_RADIUS*10;
+
+        
+        // Distance 0<distance<30
+        //System.out.println("l: " + l +" m: "+m+" r: " + r);
+        //System.out.println(r-l);
+        //System.out.println(PZNRuleFunction.getSmallAlpha(r-l)+ " " + PZNRuleFunction.getMediumAlpha(r-l) + " " +PZNRuleFunction.getLargeAlpha(r-l));
+
+
+        if(m > min  && r > min){
+            steeringAngle = 20;
+        }else if(m>min && l>min) {
+            steeringAngle =-20;
         }
-        if(steeringAngle <= -40) {
-            isAdd = true;
+        else {
+            steeringAngle = 0;
         }
 
-        if(isAdd) {
-            steeringAngle+=1;
-        }else {
-            steeringAngle-=1;
-        }
+
         return steeringAngle;
 
 
