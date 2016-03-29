@@ -35,7 +35,6 @@ public class Wall {
 	}
 
 	public boolean isIntersect(Point point1,Point point2) {
-
 		return line.intersectsLine((float) point1.getX(),(float)point1.getY(),(float)point2.getX(),(float)point2.getY());
 	}
 

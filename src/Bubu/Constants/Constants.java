@@ -6,7 +6,7 @@ public class Constants {
 	public static int CAR_RADIUS = 30;
 	public static int CAR_WIDTH = 60;
 	public static int CAR_HEIGHT = 60;
-	public static int SENSOR_DETECT_DISTANCE = 10;
+	public static int SENSOR_DETECT_DISTANCE = 30;
 
 	//rule
 	public static int SMF_RULE_NUMBER = 3;

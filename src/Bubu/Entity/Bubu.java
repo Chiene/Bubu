@@ -37,7 +37,7 @@ public class Bubu {
 		centerPosition.setX(next.getX());
 		centerPosition.setY(next.getY());
 		steeringAngle = fuzzySystem.getSteeringAngle(sensors.get(2).getDistance(),sensors.get(1).getDistance(),sensors.get(0).getDistance());
-		////horizontalAngle = 90-steeringAngle;
+		//horizontalAngle = 90-steeringAngle;
 		horizontalAngle = Math.toDegrees(Math.toRadians(horizontalAngle) - Math.asin((2*Math.sin(Math.toRadians(steeringAngle)) / Constants.CAR_HEIGHT )));
 		//System.out.println(horizontalAngle);
 		for (Sensor sensor: sensors) {

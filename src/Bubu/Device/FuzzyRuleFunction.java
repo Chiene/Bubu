@@ -76,10 +76,10 @@ public class FuzzyRuleFunction {
 
             }
         }
-
-        if (alpha == Double.MAX_VALUE) {
+        if(alpha == Double.MAX_VALUE) {
             alpha = 0;
         }
+
         return alpha;
     }
 
