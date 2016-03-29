@@ -3,8 +3,6 @@ package Bubu.Device;
 import Bubu.Entity.Point;
 import Bubu.Util.Coordinate;
 
-import java.util.Vector;
-
 /**
  * Created by jiaching on 2016/3/29.
  */
@@ -17,8 +15,8 @@ public class FuzzyRuleFunction {
 
     int r_l_value;
     int r_r_value;
-
-    Function s_function;
+    Function s_l_function;
+    Function s_r_function;
     Function m_l_function;
     Function m_r_function;
     Function f_l_function;
@@ -38,20 +36,17 @@ public class FuzzyRuleFunction {
 
         r_l_value = rlvalue;
         r_r_value = rrvalue;
-
-        s_function = new Function(Coordinate.getSlope((double) lrvalue - llvalue, -1), Coordinate.getLineConstant(Coordinate.getSlope((double) (lrvalue - llvalue), -1), new Point(lrvalue, 0)), llvalue, lrvalue);
+        s_l_function = new Function(0, Coordinate.getLineConstant(0, new Point(llvalue, 1)), Integer.MIN_VALUE, llvalue);
+        s_r_function = new Function(Coordinate.getSlope((double) lrvalue - llvalue, -1), Coordinate.getLineConstant(Coordinate.getSlope((double) (lrvalue - llvalue), -1), new Point(lrvalue, 0)), llvalue, lrvalue);
         m_l_function = new Function(Coordinate.getSlope((double) ((mrvalue + mlvalue) / 2) - mlvalue, 1), Coordinate.getLineConstant(Coordinate.getSlope(((double) (((mrvalue + mlvalue) / 2) - mlvalue)), 1), new Point(mlvalue, 0)), mlvalue, (mrvalue + mlvalue) / 2);
         m_r_function = new Function(Coordinate.getSlope((double) (mrvalue - (mrvalue + mlvalue) / 2), -1), Coordinate.getLineConstant(Coordinate.getSlope(((double) ((mrvalue - (mrvalue + mlvalue) / 2))), -1), new Point(mrvalue, 0)), (mrvalue + mlvalue) / 2, mrvalue);
         f_l_function = new Function(Coordinate.getSlope((double) (rrvalue - rlvalue), 1), Coordinate.getLineConstant(Coordinate.getSlope(((double) (rrvalue - rlvalue)), 1), new Point(rlvalue, 0)), rlvalue, rrvalue);
         f_r_function = new Function(0, Coordinate.getLineConstant(0, new Point(rrvalue, 1)), rrvalue, Integer.MAX_VALUE);
-//        functions.add(s_function);
-//        functions.add(m_l_function);
-//        functions.add(m_r_function);
-//        functions.add(f_l_function);
-//        functions.add(f_r_function);
+
     }
+
     public double getSmallAlpha(double distance) {
-        Function functions[] = {s_function};
+        Function functions[] = {s_l_function,s_r_function};
         return getAlpha(functions,distance);
     }
 

@@ -11,8 +11,6 @@ public class MainWindow extends JFrame{
 		setVisible(true);
 		setSize(Constants.WINDOW_WIDTH,Constants.WINDOW_HEIGHT+40);
 		getBounds().getWidth();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		add(new TrackPanel());
 	}
 

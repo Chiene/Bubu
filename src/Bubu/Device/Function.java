@@ -17,6 +17,7 @@ public class Function {
     }
 
     public boolean isInDomain(int x) {
+
         return (x >= minX && x <= maxX);
     }
 

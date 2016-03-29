@@ -13,8 +13,8 @@ public class FuzzySystem {
     boolean isAdd = true;
     FuzzyRuleFunction SMFRuleFunction;
     FuzzyRuleFunction PZNRuleFunction;
-    public FuzzySystem() {
 
+    public FuzzySystem() {
         SMFRuleFunction = new FuzzyRuleFunction(0,40,20,100,80,120);
         PZNRuleFunction = new FuzzyRuleFunction(-160,-40,-120,120,40,160);
     }
@@ -24,10 +24,7 @@ public class FuzzySystem {
 
         double MAX = Constants.SENSOR_DETECT_DISTANCE*Constants.CAR_RADIUS;
         double MIN = Constants.CAR_RADIUS*10;
-        //System.out.println("l: " + l +" m: "+m+" r: " + r);
-        //System.out.println(SMFRuleFunction.getSmallAlpha(m)+" " +SMFRuleFunction.getMediumAlpha(m) + " "+SMFRuleFunction.getLargeAlpha(m));
-        //System.out.println(PZNRuleFunction.getSmallAlpha(r-l)+" " +PZNRuleFunction.getMediumAlpha(r-l) + " "+PZNRuleFunction.getLargeAlpha(r-l));
-        //System.out.println();
+
         double alpha[][] = new double[Constants.SMF_RULE_NUMBER][Constants.PZN_RULE_NUMBER];
         int index = 0;
         double alphaWeight = 0;
@@ -43,18 +40,13 @@ public class FuzzySystem {
 
                 alphaWeight += alpha[i][j] * getTheta(index);
                 weight += alpha[i][j];
-                //System.out.print(alpha[i][j] + " ");
                 index += 1;
             }
-            //System.out.println();
+
         }
-        //System.out.println();
-        System.out.println(alphaWeight/weight);
 
-
-        return alphaWeight/weight;
-
-
+        double result = alphaWeight/weight;
+        return result;
     }
 
     private double getAlpha(int index,double mDiff,double lrDiff) {
@@ -95,34 +87,33 @@ public class FuzzySystem {
         double result = 0;
         switch (index){
             case 0://SP(SS)
-                result = -40;
+                result = -20;
                 break;
             case 1://SZ(SM)
-                result = -20;
-                // break;
+                result = 0;
+                break;
             case 2://SN(SF)
-                result = 40;
+                result = 20;
                 break;
             case 3://MP(MS)
-                result = -30;
+                result = -15;
                 break;
             case 4://MZ(MZ)
                 result = 0;
                 break;
             case 5://MN(MF)
-                result = 20;
+                result = 25;
                 break;
             case 6://FP(FS)
-                result = -30;
+                result = -10;
                 break;
             case 7://FZ(FM)
                 result = 0;
                 break;
             case 8://FN(FF)
-                result = 10;
+                result = 15;
                 break;
         }
-
         return result;
     }
 

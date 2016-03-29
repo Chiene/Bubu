@@ -34,19 +34,17 @@ public class Sensor {
 
     }
 
-    public int detect(double steeringAngle) {
+    public int detect(double steeringAngle, double horizontalAngle) {
         intersectPoint.setX(Double.MAX_VALUE);
         intersectPoint.setY(Double.MAX_VALUE);
-        if(steeringAngle > 0) {
-            angle = fixedAngle - Math.abs(steeringAngle);
-        }
-        else if (steeringAngle < 0) {
 
-            angle = fixedAngle + Math.abs(steeringAngle);
-        }
-        else {
-            angle = fixedAngle;
-        }
+
+        //System.out.println(fixedAngle + " " + angle + "("+horizontalAngle+")");
+
+        angle = horizontalAngle-fixedAngle;
+
+
+        //System.out.println(fixedAngle + " " + angle + "("+horizontalAngle+")");
 
         edgePoint.setX(nextPosition.getX()+Constants.CAR_RADIUS*Math.cos(Math.toRadians(angle)));
         edgePoint.setY(nextPosition.getY()+Constants.CAR_RADIUS*Math.sin(Math.toRadians(angle)));

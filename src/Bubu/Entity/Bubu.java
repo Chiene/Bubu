@@ -26,24 +26,22 @@ public class Bubu {
         fuzzySystem = new FuzzySystem();
         sensors = new Vector<>();
         sensors.add(new Sensor(map,45,centerPosition));
-        sensors.add(new Sensor(map,90,centerPosition));
-        sensors.add(new Sensor(map,135,centerPosition));
+        sensors.add(new Sensor(map,0,centerPosition));
+        sensors.add(new Sensor(map,-45,centerPosition));
 
 	}
 
 	public void update() {
-
 		Point next = getNextPosition(centerPosition);
 		centerPosition.setX(next.getX());
 		centerPosition.setY(next.getY());
 		steeringAngle = fuzzySystem.getSteeringAngle(sensors.get(2).getDistance(),sensors.get(1).getDistance(),sensors.get(0).getDistance());
-		//horizontalAngle = 90-steeringAngle;
 		horizontalAngle = Math.toDegrees(Math.toRadians(horizontalAngle) - Math.asin((2*Math.sin(Math.toRadians(steeringAngle)) / Constants.CAR_HEIGHT )));
-		//System.out.println(horizontalAngle);
+
 		for (Sensor sensor: sensors) {
             sensor.updateCenterPosition(centerPosition);
 			sensor.updateNextPosition(getNextPosition(centerPosition));
-			sensor.detect(steeringAngle);
+			sensor.detect(steeringAngle,horizontalAngle);
         }
 	}
 
