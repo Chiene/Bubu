@@ -1,4 +1,4 @@
-package Bubu.Device;
+package Bubu.Device.FuzzySystem;
 
 /**
  * Created by jiaching on 2016/3/29.

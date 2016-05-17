@@ -1,4 +1,4 @@
-package Bubu.Device;
+package Bubu.Device.FuzzySystem;
 
 import Bubu.Entity.Point;
 import Bubu.Util.Coordinate;

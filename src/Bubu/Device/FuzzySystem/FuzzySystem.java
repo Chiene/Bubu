@@ -1,7 +1,6 @@
-package Bubu.Device;
+package Bubu.Device.FuzzySystem;
 
 import Bubu.Constants.Constants;
-import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
 
 /**
  * Created by jiaching on 2016/3/25.
