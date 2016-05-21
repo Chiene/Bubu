@@ -5,6 +5,7 @@ import Bubu.Entity.Point;
 import Bubu.Entity.Wall;
 import Bubu.Environment.Map;
 import Bubu.Util.Coordinate;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import java.awt.*;
 
@@ -94,7 +95,13 @@ public class Sensor {
     }
 
     public double getDistance() {
-        return distance;
+        if(this.distance > Constants.SENSOR_DETECT_MAX_DISTANCE) {
+            this.distance = Constants.SENSOR_DETECT_MAX_DISTANCE;
+        }
+
+        double normalizeDistances = (this.distance / Constants.SENSOR_DETECT_MAX_DISTANCE) * Constants.NORMALIZED_MAX_DISTANCE;
+
+        return normalizeDistances ;
     }
 
     public void updateCenterPosition(Point _centerPosition) {

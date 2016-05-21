@@ -3,6 +3,7 @@ package Bubu.Device.RBF;
 import Bubu.IO.Printer;
 import Bubu.Interface.BasicFunction;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 /**
@@ -55,7 +56,8 @@ public class RBF implements BasicFunction{
         int dimensions = this.distance.length / this.neuronCount;
         double value = this.theta;
         for (int i = 0;i < this.neuronCount; i++) {
-            value += this.weights[i] * neuron.getAngle(_inputDistance,Arrays.copyOfRange(this.distance,i,i+dimensions),this.sigma[i]);
+            double result = neuron.getAngle(_inputDistance,Arrays.copyOfRange(this.distance,i*dimensions,i*dimensions+dimensions),this.sigma[i]);
+            value += this.weights[i] * result;
         }
         return value;
     }

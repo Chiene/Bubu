@@ -13,11 +13,12 @@ public class Neuron implements RadisBasicFunction {
     @Override
     public double getAngle(double _input[],double _distance[],double _sigma) {
         assert _input.length == _distance.length;
-        double result = 0;
+        double vectorValue = 0;
         for(int i =0;i<_input.length;i++) {
-            result += Math.exp((-1) * Math.pow(_input[i]-_distance[i],2) / 2 * _sigma);
+            vectorValue += Math.pow(_input[i]-_distance[i],2);
         }
-        return result;
+
+        return Math.exp((-1) * (vectorValue/ (2 * Math.pow(_sigma,2))));
     }
 
 }

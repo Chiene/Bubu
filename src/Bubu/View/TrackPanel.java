@@ -1,18 +1,19 @@
 package Bubu.View;
 
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 import javax.swing.JPanel;
 
 import Bubu.Constants.Constants;
+import Bubu.Device.GeneticSystem.GeneticSystem;
+import Bubu.Device.RBF.RBF;
+import Bubu.Device.RBF.RBFControlSystem;
 import Bubu.Entity.Bubu;
 import Bubu.Entity.Point;
-import Bubu.Entity.Wall;
-import Bubu.Environment.Map;;
+import Bubu.Environment.Map;
+import Bubu.Util.FileUtility;;
 
 public class TrackPanel extends JPanel {
 	Bubu bubu;
@@ -21,12 +22,30 @@ public class TrackPanel extends JPanel {
 
 	public TrackPanel() {
 		super();
-        anchor = new Point(Constants.WINDOW_WIDTH / 3, Constants.WINDOW_HEIGHT);
+        anchor = new Point(Constants.ANCHOR_OFFSET_X, Constants.WINDOW_HEIGHT/2 + Constants.ANCHOR_OFFSET_Y);
 
 		initMap();
 		// TODO Auto-generated constructor stub
-		bubu = new Bubu(map, new Point(0, 0));
-		repaint();
+
+		int neuroNumber = 6;
+
+		GeneticSystem geneticSystem = new GeneticSystem(Constants.RBF_DEFAULT_DIMENSION,100,500,0.2,0.3,new RBF(neuroNumber));
+
+		try {
+			 geneticSystem.loadTrainningData(FileUtility.getLines(FileUtility.getFileName("resources")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		geneticSystem.run();
+		RBF rbf = new RBF(neuroNumber);
+		rbf.setParameter(
+				geneticSystem.getSolutionDNA().getTheta(),
+				geneticSystem.getSolutionDNA().getWeights(),
+				geneticSystem.getSolutionDNA().getDistances(),
+				geneticSystem.getSolutionDNA().getSigma()
+		);
+
+		bubu = new Bubu(map, new Point(0, 0),new RBFControlSystem(rbf));
 		start();
 	}
 
