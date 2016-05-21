@@ -3,7 +3,6 @@ package Bubu.Device.GeneticSystem;
 import Bubu.Constants.Constants;
 import Bubu.Interface.BasicFunction;
 
-import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -21,21 +20,23 @@ public class GeneticSystem {
     private ArrayList<DNA> dnaList;
     private int dimensions;
     private double result1 = Double.MAX_VALUE;
+    private double fitValueThreshold ;
 
 
     //設定疊代次數、族群大小、突變機率、交配機率
-    public GeneticSystem(int _dimensions,int _iterationCounts, int _populationSize, double _crossProbability, double _mutProbability, BasicFunction _rbf) {
-        this.crossProbability = _crossProbability;
-        this.mutProbability = _mutProbability;
-        this.iterationCount = _iterationCounts;
-        this.populationSize = _populationSize;
+    public GeneticSystem(int _dimensions,GeneticParameter geneticParameter, BasicFunction _rbf) {
+        this.crossProbability = geneticParameter.getCrossOverProbability();
+        this.mutProbability = geneticParameter.getMutationProbability();
+        this.iterationCount = geneticParameter.getIterationCount();
+        this.populationSize = geneticParameter.getPopulationSize();
         this.dimensions = _dimensions;
+        this.fitValueThreshold = geneticParameter.getFitValueThreshold();
         rbf = _rbf;
         dnaList = new ArrayList();
 
     }
 
-    public void loadTrainningData(String _trainninDatas[]) {
+    public void loadTrainingData(String _trainninDatas[]) {
         this.trainninDatas = _trainninDatas;
     }
 
@@ -47,14 +48,19 @@ public class GeneticSystem {
         int t=0;
         while (t < iterationCount) {
             reproduction();
-            System.out.println(calculateDiffError(this.dnaList.get(0)));
             crossOver();
             mutate();
+            if(this.solutionDNA.getFitnessVaule() <  this.fitValueThreshold) {
+                break;
+            }
             t++;
         }
+        //this.solutionDNA.setFitnessValue(calculateDiffError(this.solutionDNA));
     }
 
-    public DNA getSolutionDNA() {return this.solutionDNA;}
+    public DNA getSolutionDNA() {
+        return this.solutionDNA;
+    }
 
     private DNA generateDNA(int dimensions, int neuronNumber) {
         double weights[] = new double[neuronNumber];
@@ -70,7 +76,7 @@ public class GeneticSystem {
             }
         }
         DNA dna = new DNA(weights,distances,sigma,theta);
-        dna.setFitnessValue(calculateFitnessValue(dna));
+        dna.setFitnessValue(calculateDiffError(dna));
         return dna;
     }
 
@@ -82,18 +88,6 @@ public class GeneticSystem {
         return DNAs;
     }
 
-    private double calculateFitnessValue(DNA dna) {
-        this.rbf.setParameter(dna.getTheta(),dna.getWeights(),dna.getDistances(),dna.getSigma());
-        double error = 0;
-        for(int j=0;j<this.trainninDatas.length;j++) {
-            String datas[] = this.trainninDatas[j].split(" ");
-            double input[] = {Double.valueOf(datas[0]) ,Double.valueOf(datas[1]),Double.valueOf(datas[2])};
-
-            error+=  Math.pow(Math.abs(Double.valueOf(datas[3]) -  this.rbf.getOutput(input)),2);
-        }
-
-        return (error / 2);
-    }
 
     private double calculateDiffError(DNA dna) {
         this.rbf.setParameter(dna.getTheta(),dna.getWeights(),dna.getDistances(),dna.getSigma());
@@ -101,7 +95,6 @@ public class GeneticSystem {
         for(int j=0;j<this.trainninDatas.length;j++) {
             String datas[] = this.trainninDatas[j].split(" ");
             double input[] = {Double.valueOf(datas[0]) ,Double.valueOf(datas[1]),Double.valueOf(datas[2])};
-
             error+=  Math.abs(Double.valueOf(datas[3]) -  this.rbf.getOutput(input));
         }
         return error/this.trainninDatas.length;
@@ -113,30 +106,30 @@ public class GeneticSystem {
         ArrayList<DNA> poolsDNAs = new ArrayList<>();
         double totalValue = 0;
         for(int d = 0 ; d < this.dnaList.size();d++) {
-            this.dnaList.get(d).setFitnessValue(calculateFitnessValue(this.dnaList.get(d)));
+            this.dnaList.get(d).setFitnessValue(calculateDiffError(this.dnaList.get(d)));
             if(this.dnaList.get(d).getFitnessVaule() < this.solutionDNA.getFitnessVaule()) {
                 this.solutionDNA = copyDNA(this.dnaList.get(d));
             }
             totalValue += this.dnaList.get(d).getFitnessVaule();
         }
         this.dnaList.sort(DNAComparator);
-
+        System.out.println(calculateDiffError(this.dnaList.get(0)));
         int greatDNACount =(int) ((double)this.populationSize * Constants.DNA_FIRST_PERCENT);
         int secondDNACount = (int) ((double)this.populationSize * Constants.DNA_SECOND_PERCENT);
-        int newDNACount = (int) ((double)this.populationSize * Constants.DNA_NEW_PERCENT);
 
-        DNA greatDNA = this.solutionDNA;
+        DNA greatDNA = this.dnaList.get(0);
         while(greatDNACount > 0) {
             poolsDNAs.add(copyDNA(greatDNA));
             greatDNACount--;
         }
-        int i = 1;
+        int i = 0;
+
         while (secondDNACount > 0) {
             double result = (  totalValue / this.dnaList.get(i).getFitnessVaule());
             int reproduceCount =(int) Math.round( result / this.populationSize) ;
             if(reproduceCount >0 ) {
                 for(int j=0;j<reproduceCount;j++) {
-                    poolsDNAs.add(this.dnaList.get(i));
+                    poolsDNAs.add(copyDNA(this.dnaList.get(i)));
                     secondDNACount--;
                 }
             } else {
@@ -146,7 +139,11 @@ public class GeneticSystem {
         }
 
         while (poolsDNAs.size() <  this.dnaList.size()) {
-            poolsDNAs.add(generateDNA(this.dimensions,this.rbf.getNeuronCount()));
+            DNA newDNA = generateDNA(this.dimensions,this.rbf.getNeuronCount());
+            poolsDNAs.add(newDNA);
+            if(newDNA.getFitnessVaule() <  this.solutionDNA.getFitnessVaule()) {
+                this.solutionDNA = copyDNA(newDNA);
+            }
         }
 
 
@@ -157,11 +154,18 @@ public class GeneticSystem {
     }
 
     private void crossOver() {
-
+        int persevCount =(int) (this.populationSize * Constants.DNA_RESERVE_PERCENT);
+        for(int i= persevCount ;i < populationSize/2;i++) {
+            double probability = Math.random();
+            if(probability < this.crossProbability) {
+                this.dnaList.get(i).crossOver(this.dnaList.get(populationSize/2+i));
+            }
+        }
     }
 
     private void mutate() {
-        for(int i =0 ;i < this.populationSize ;i++) {
+        int persevCount =(int) (this.populationSize * Constants.DNA_RESERVE_PERCENT);
+        for(int i = persevCount ;i < this.populationSize ;i++) {
             double probability= Math.random();
             if(probability < this.mutProbability) {
                 if(this.dnaList.get(i).getFitnessVaule() > this.solutionDNA.getFitnessVaule()) {
@@ -186,8 +190,19 @@ public class GeneticSystem {
     };
 
     private DNA copyDNA(DNA copyDna) {
-        DNA dna = new DNA(copyDna.getWeights(),copyDna.getDistances(),copyDna.getSigma(),copyDna.getTheta());
+        DNA dna = new DNA(copyValue(copyDna.getWeights()),copyValue(copyDna.getDistances()),copyValue(copyDna.getSigma()),copyDna.getTheta());
         dna.setFitnessValue(copyDna.getFitnessVaule());
         return dna;
     }
+
+    private double[] copyValue(double copyValue[]) {
+        double value[] = new double[copyValue.length];
+        for (int i=0 ; i < copyValue.length;i++) {
+            value[i] = copyValue[i];
+        }
+        return value;
+
+    }
+
+
 }

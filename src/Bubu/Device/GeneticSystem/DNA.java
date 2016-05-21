@@ -182,26 +182,23 @@ public class DNA {
 
     }
     public void mutate() {
+        double random =Math.random();
         for(int j =0 ; j < this.getDistances().length;j++) {
             double value = Constants.DNA_MAX_DISTANCES - this.getDistances()[j];
-            double random =Math.random();
             this.getDistances()[j] = this.getDistances()[j] + ((random > 0.5)? -1*(Math.random()*this.getDistances()[j]): Math.random()*value);
         }
 
         for(int j =0 ; j < this.getWeights().length;j++) {
             double value = Constants.DNA_MAX_WEIGHT - this.getWeights()[j];
-            double random =Math.random();
             this.getWeights()[j] = this.getWeights()[j] + ((random > 0.5)? (Math.random()*((-1*Constants.DNA_MAX_WEIGHT) -this.getWeights()[j])): Math.random()*value);
         }
 
         for(int j =0 ; j < this.getSigma().length;j++) {
             double value = Constants.DNA_MAX_SIGMA - this.getSigma()[j];
-            double random = Math.random();
             this.getSigma()[j] = this.getSigma()[j] + ((random > 0.5)? -1*(Math.random()*this.getSigma()[j]): Math.random()*value);
         }
 
         double value = Constants.DNA_MAX_THETA - this.getTheta();
-        double random = Math.random();
         this.setTheta( this.getTheta() + ((random > 0.5)? -1*(Math.random()*this.getTheta()): Math.random()*value));
     }
 

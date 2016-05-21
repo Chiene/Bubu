@@ -40,7 +40,7 @@ public class Bubu {
 		centerPosition.setX(next.getX());
 		centerPosition.setY(next.getY());
 		System.out.println(String.format("%.2f %.2f %.2f",sensors.get(2).getDistance(),sensors.get(1).getDistance(),sensors.get(0).getDistance()));
-		double dis[] = {sensors.get(2).getDistance(),sensors.get(1).getDistance(),sensors.get(0).getDistance()};
+		double dis[] = {sensors.get(1).getDistance(),sensors.get(0).getDistance(),sensors.get(2).getDistance()};
 		steeringAngle = controlSystem.getSteeringAngle(dis);
 		System.out.println("SteeringAngle " +steeringAngle);
 		System.out.println();

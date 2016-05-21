@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Bubu:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Bubu_jar</output-path>
+    <root id="archive" name="Bubu.jar">
+      <element id="module-output" name="Bubu" />
+      <element id="dir-copy" path="$PROJECT_DIR$/resources" />
+    </root>
+  </artifact>
+</component>
